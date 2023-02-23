@@ -30,7 +30,7 @@ SenateMembers <- read_excel("Senate XML.xlsx") %>%
   mutate(Senator = seq_along(1:2)) %>%
   pivot_wider(id_cols = state, names_from = Senator, values_from = SenateMemberwParty, names_prefix = "Senator ")
 
-CGCSDistricts <- read_csv("CGCS NCES IDs for Congress Member Merge.csv") %>%
+CGCSDistricts <- read_xlsx("CGCS Districts 10.2022.xlsx") %>%
   select("LEAID", "LEA_NAME")
 CGCSDistricts$LEAID <- sprintf("%07d", CGCSDistricts$LEAID)
 
