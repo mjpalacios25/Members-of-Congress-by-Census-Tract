@@ -35,7 +35,7 @@ CGCSDistricts <- read_xlsx("CGCS Districts 10.2022.xlsx") %>%
 CGCSDistricts$LEAID <- sprintf("%07d", CGCSDistricts$LEAID)
 
 #Filter Census File by CGCS District LEAIDs
-vars <- c("LEAID", "NAME_LEA21", "State", "STATE", "CD", "COUNT", "district", "town+name", "HouseMemberwParty", "Senator 1", "Senator 2")
+vars <- c("LEAID", "NAME_LEA22", "State", "STATE", "CD", "COUNT", "district", "town+name", "HouseMemberwParty", "Senator 1", "Senator 2")
 
 CensusFiltered <- CensusCongressionalFile %>%
   inner_join(CGCSDistricts, by =  c("LEAID")) %>%
