@@ -9,8 +9,14 @@ library("readr")
 rm(list = ls())
 
 #Read in files, and bind rows on Census File
-CensusFile <- list.files() %>% str_subset(pattern = START %R% "grf")
-CensusCongressionalFile <- read_xlsx(CensusFile) %>% separate(col = "STCD116", into = c("STATE", "CD"), 2)
+# CensusFile <- list.files() %>% str_subset(pattern = START %R% "grf")
+
+#adjusted for 2023 because NCES did not have 118th congressional districts matched with LEAs
+
+CensusCongressionalFile <- read_xlsx("Census School District to 118th Congressional District.xlsx")
+CensusCongressionalFile$GEOID_CD118_20 <- sprintf("%04d", CensusCongressionalFile$GEOID_CD118_20)
+CensusCongressionalFile <- CensusCongressionalFile %>% separate(col = "GEOID_CD118_20", into = c("STATE", "CD"), 2)
+CensusCongressionalFile$LEAID <- sprintf("%07d", CensusCongressionalFile$LEAID)
 StateCodes <- read_xlsx("State Codes.xlsx")
 
 #need recode of state abbrv. to state numbers
@@ -35,7 +41,8 @@ CGCSDistricts <- read_xlsx("CGCS Districts 10.2022.xlsx") %>%
 CGCSDistricts$LEAID <- sprintf("%07d", CGCSDistricts$LEAID)
 
 #Filter Census File by CGCS District LEAIDs
-vars <- c("LEAID", "NAME_LEA22", "State", "STATE", "CD", "COUNT", "district", "town+name", "HouseMemberwParty", "Senator 1", "Senator 2")
+# vars <- c("LEAID", "NAME_LEA22", "State", "STATE", "CD", "COUNT", "district", "town+name", "HouseMemberwParty", "Senator 1", "Senator 2")
+vars <- c("LEAID", "LEA_NAME",  "State", "STATE", "CD", "district", "town+name", "HouseMemberwParty", "Senator 1", "Senator 2")
 
 CensusFiltered <- CensusCongressionalFile %>%
   inner_join(CGCSDistricts, by =  c("LEAID")) %>%
